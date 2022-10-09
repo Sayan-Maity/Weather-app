@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="Assets/CSS/style.css">
+    <title>Weather App</title>
+
+
+</head>
+<body>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+
+
+    <form class="container">
+        <input type="search" id="search-input" autocomplete="off" placeholder="Enter City Name" required  >
+        <button id="button" type="submit">Search</button>
+    </form>
+
+    <main id="app-container">
+        <div id="location">
+            <p>----</p>
+        </div>
+        <div id="temp">
+            <img id="temp-icon" src="Images/weather.jpg.png" alt="">
+            <p><span id="temp-value">----</span> <span id="temp-unit">&#176c</span></p>
+        </div>
+
+        <div id="climate">
+            <p>----</p>
+        </div>
+
+
+
+
+    </main>
+
+
+<link rel="stylesheet" href="">
+
+    <script>
+
+let loc = document.getElementById("location");
+let tempicon = document.getElementById("temp-icon");
+let tempvalue = document.getElementById("temp-value");
+let climate = document.getElementById("climate");
+let iconfile;
+const searchInput = document.getElementById("search-input");
+const searchButton = document.getElementById("button");
+
+
+searchButton.addEventListener('click', (e)=>{
+e.preventDefault();
+getWeather(searchInput.value);
+searchInput.value='';
+
+
+});
+
+const getWeather = async(city)=>{
+    try{
+        const response = await fetch(` https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=7d8e11c283ea53c5a674b198cf35346b `,
+        {mode: 'cors'}
+            );
+
+    const weatherData = await response.json();
+    console.log(weatherData);
+    const {name} = weatherData;
+    const {feels_like} = weatherData.main;
+    const {id,main} = weatherData.weather[0];
+
+    loc.textContent = name;
+    climate.textContent = main;
+    tempvalue.textContent = Math.round(feels_like-273);
+
+    
+
+    if(id<250 && id>200)
+        {
+            tempicon.src = "Images/thunderstorm.jpg.png"
+        }
+    else if(id<350 && id>300)
+        {
+            tempicon.src = "Images/drizzle.jpg.png"
+        }
+    else if(id<550 && id>500)
+        {
+            tempicon.src = "Images/rain.jpg.png"
+        }
+    else if(id<650 && id>600)
+        {
+            tempicon.src = "Images/snow.jpg.png"
+        }
+    else if(id<709 && id>700)
+        {
+            tempicon.src = "Images/mist.jpg.png"
+        }
+    else if(id<719 && id>710)
+        {
+            tempicon.src = "Images/smoke.jpg.png"
+        }
+    else if(id<729 && id>720)
+        {
+            tempicon.src = "Images/haze.jpg.png"
+        }
+    else if(id<739 && id>730)
+        {
+            tempicon.src = "Images/dust.jpg.png"
+        }
+     else if(id<749 && id>740)
+        {
+            tempicon.src = "Images/fog.jpg.png"
+        }
+    else if(id<759 && id>750)
+        {
+            tempicon.src = "Images/sand.jpg.png"
+        }
+    else if(id<789 && id>770)
+        {
+            tempicon.src = "Images/squall.jpg.png"
+        }
+    else if(id<790 && id>780)
+        {
+            tempicon.src = "Images/tornado.jpg.png"
+        }
+    else if(id==800)
+        {
+            tempicon.src = "Images/sun.jpg.png"
+        }
+    else if(id<=805 && id>=801)
+        {
+            tempicon.src = "Images/clouds.jpg.png"
+        }
+
+    }
+
+catch(error){
+    alert('city not found')
+}
+
+
+};
+
+
+
+
+
+window.addEventListener("load" ,()=>{
+let long;
+let lat;
+if(navigator.geolocation){
+
+    navigator.geolocation.getCurrentPosition((position)=>{
+
+        long = position.coords.longitude;
+        lat = position.coords.latitude;
+        const proxy = "https://cors-anywhere.herokuapp.com/";
+
+
+
+const api = ` ${proxy}api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=7d8e11c283ea53c5a674b198cf35346b  `
+
+
+fetch (api).then((response)=>{
+    return response.json();
+
+
+})
+
+.then (data => {
+  
+    const {name} = data;
+    const {feels_like} = data.main;
+    const {id,main} = data.weather[0];
+
+
+    loc.textContent = name;
+    climate.textContent = main;
+    tempvalue.textContent = Math.round(feels_like-273);
+
+    if(id<250 && id>200)
+        {
+            tempicon.src = "Images/thunderstorm.jpg.png"
+        }
+    else if(id<350 && id>300)
+        {
+            tempicon.src = "Images/drizzle.jpg.png"
+        }
+    else if(id<550 && id>500)
+        {
+            tempicon.src = "Images/rain.jpg.png"
+        }
+    else if(id<650 && id>600)
+        {
+            tempicon.src = "Images/snow.jpg.png"
+        }
+    else if(id<709 && id>700)
+        {
+            tempicon.src = "Images/mist.jpg.png"
+        }
+    else if(id<719 && id>710)
+        {
+            tempicon.src = "Images/smoke.jpg.png"
+        }
+    else if(id<729 && id>720)
+        {
+            tempicon.src = "Images/haze.jpg.png"
+        }
+    else if(id<739 && id>730)
+        {
+            tempicon.src = "Images/dust.jpg.png"
+        }
+     else if(id<749 && id>740)
+        {
+            tempicon.src = "Images/fog.jpg.png"
+        }
+    else if(id<759 && id>750)
+        {
+            tempicon.src = "Images/sand.jpg.png"
+        }
+    else if(id<789 && id>770)
+        {
+            tempicon.src = "Images/squall.jpg.png"
+        }
+    else if(id<790 && id>780)
+        {
+            tempicon.src = "Images/tornado.jpg.png"
+        }
+    else if(id==800)
+        {
+            tempicon.src = "Images/sun.jpg.png"
+        }
+    else if(id<=805 && id>=801)
+        {
+            tempicon.src = "Images/clouds.jpg.png"
+        }
+
+
+
+    console.log(data)
+
+    })
+
+
+
+        })
+
+    }
+})
+
+
+
+
+    </script>
+    
+</body>
+</html>
